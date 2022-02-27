@@ -12,19 +12,31 @@ import matplotlib.pyplot as plt
 
 # open csv
 data = pd.read_csv('Kinematics_Data.csv')
-# отбрасываем ненужную информацию
-data.drop(['date', 'time', 'username', 'wrist'], axis=1, inplace=True)
-
 print('Исходные данные')
-print(data.head())
+print(data.to_string(max_rows=10))
+print()
+
+# отбрасываем ненужную информацию
+data.drop(['date', 'time', 'username'], axis=1, inplace=True)
+pd.options.display.width = 0
+
+print('Исходные данные после отбрасывания информации, которая не относится к классификации')
+print(data.to_string(max_rows=10))
+print()
+
+# Корреляционная матрица
+corr_matrix = data.loc[:, :].corr()
+print('Корреляционная матрица')
+print(corr_matrix)
 print()
 
 print('Описательные статистики')
 print(data.describe())
 print(f'Кол-во строк: {data.shape}')
+print()
 
 # разделяем данные
-X = data.iloc[:, :].values
+X = data.drop('activity', axis=1)
 y = data['activity']
 
 # разделяем на обучающую и тестовую выборки
